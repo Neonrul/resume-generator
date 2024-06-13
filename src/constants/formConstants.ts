@@ -1,4 +1,5 @@
-import { IFormData, IIconOption } from '../types/formTypes.ts';
+import { IFormData, IFormStep, IIconOption } from '../types/formTypes.ts';
+import { TFormPages } from '../types/TPages.ts';
 
 const IconsOptions: IIconOption[] = [
   { label: 'Email', value: new URL('../assets/icons/email.svg', import.meta.url).href },
@@ -34,7 +35,16 @@ const initialFormData: IFormData = {
   interests: [{ name: '', icon: '' }],
 };
 
+const initialFormSteps: IFormStep[] = [
+  { number: 1, id: TFormPages.PERSONAL, complete: false },
+  { number: 2, id: TFormPages.CONTACTS, complete: false },
+  { number: 3, id: TFormPages.SKILLS, complete: false },
+  { number: 4, id: TFormPages.EXPERIENCE, complete: false },
+  { number: 5, id: TFormPages.EDUCATION, complete: false },
+  { number: 6, id: TFormPages.INTERESTS, complete: false },
+];
+
 const VALIDATION_STRING = 'Neonrul Resume Generator File' as const;
 const BLANK_IMAGE = 'about:blank' as const;
 
-export { initialFormData, IconsOptions, VALIDATION_STRING, BLANK_IMAGE };
+export { initialFormData, IconsOptions, initialFormSteps, VALIDATION_STRING, BLANK_IMAGE };

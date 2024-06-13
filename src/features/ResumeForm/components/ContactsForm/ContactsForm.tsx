@@ -2,7 +2,6 @@ import Input from '../../../../components/Input/Input.tsx';
 import Select from '../../../../components/Select/Select.tsx';
 import { IconsOptions } from '../../../../constants/formConstants.ts';
 import Button from '../../../../components/Button/Button.tsx';
-import { Accordion } from '../../../../components/Accordion/Accordion.tsx';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { IFormData } from '../../../../types/formTypes.ts';
 import { FC } from 'react';
@@ -19,7 +18,7 @@ export const ContactsForm: FC = () => {
   });
 
   return (
-    <Accordion title="Your contacts">
+    <section>
       {contactsField.fields.map((field, index) => {
         switch (index) {
           case 0:
@@ -77,6 +76,6 @@ export const ContactsForm: FC = () => {
         }
       })}
       <Button onClick={() => contactsField.append({ info: '', icon: 'Select icon' })}>Add another contact</Button>
-    </Accordion>
+    </section>
   );
 };

@@ -1,0 +1,29 @@
+@import 'styles/_helpers';
+
+.ChoiceSection {
+  @include Flex(null, space-around);
+
+  gap: spacing(2);
+
+  &_description {
+    @include FlexColumn;
+    gap: spacing(4);
+    margin-top: spacing(3);
+  }
+
+  & .text {
+    @include Flex(center, flex-start);
+
+    &.right {
+      justify-content: flex-end;
+    }
+  }
+  .icon {
+    width: 30px;
+    height: 30px;
+
+    &.right {
+      transform: rotate(180deg);
+    }
+  }
+}

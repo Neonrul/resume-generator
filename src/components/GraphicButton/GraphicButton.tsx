@@ -8,7 +8,7 @@ interface IGraphicButtonProps {
   label: string;
   image: string;
   angle: TAngle;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const angleConfig: Record<TAngle, number> = {

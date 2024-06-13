@@ -2,6 +2,7 @@ import { IPositionExplore, IUserEducation, TResumeData } from './TResumeData.ts'
 import { Control, FieldError, FieldErrors, UseFormRegister } from 'react-hook-form';
 import { HTMLProps } from 'react';
 import { Area } from 'react-easy-crop';
+import { TFormPages } from './TPages.ts';
 
 interface IIconOption {
   value: string;
@@ -44,4 +45,10 @@ interface IFormComponent {
   errors?: FieldErrors<IFormData>;
 }
 
-export type { TFormElement, IIconOption, IFormData, IFormAttributes, IFormComponent, IStampedFormData };
+interface IFormStep {
+  id: TFormPages;
+  number: number;
+  complete: boolean;
+}
+
+export type { TFormElement, IIconOption, IFormData, IFormAttributes, IFormComponent, IStampedFormData, IFormStep };

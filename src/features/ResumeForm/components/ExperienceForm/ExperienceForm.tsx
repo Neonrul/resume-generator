@@ -6,7 +6,6 @@ import { DateInput } from '../../../../components/Input/DateInput.tsx';
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
 import Button from '../../../../components/Button/Button.tsx';
-import { Accordion } from '../../../../components/Accordion/Accordion.tsx';
 
 export const ExperienceForm: FC = () => {
   const { control, register, setValue } = useFormContext<IFormData>();
@@ -20,7 +19,7 @@ export const ExperienceForm: FC = () => {
   };
 
   return (
-    <Accordion title="Experience">
+    <>
       {experienceField.fields.map((field, index) => {
         register(`experience.${index}.description`);
         const dateTimeProps = {
@@ -86,6 +85,6 @@ export const ExperienceForm: FC = () => {
       >
         Tell about your experience
       </Button>
-    </Accordion>
+    </>
   );
 };

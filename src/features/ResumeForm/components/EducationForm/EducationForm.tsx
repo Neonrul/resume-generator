@@ -2,7 +2,6 @@ import { FC } from 'react';
 import Input from '../../../../components/Input/Input.tsx';
 import { DateInput } from '../../../../components/Input/DateInput.tsx';
 import Button from '../../../../components/Button/Button.tsx';
-import { Accordion } from '../../../../components/Accordion/Accordion.tsx';
 import { IFormData } from '../../../../types/formTypes.ts';
 import { FieldPath, useFieldArray, useFormContext } from 'react-hook-form';
 
@@ -17,7 +16,7 @@ export const EducationForm: FC = () => {
   };
 
   return (
-    <Accordion title="Education">
+    <>
       {educationField.fields.map((field, index) => {
         const dateTimeProps = {
           timeFormat: false,
@@ -70,6 +69,6 @@ export const EducationForm: FC = () => {
       >
         Tell about your education
       </Button>
-    </Accordion>
+    </>
   );
 };

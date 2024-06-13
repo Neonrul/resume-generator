@@ -1,9 +1,11 @@
 @import 'styles/_helpers';
 
 .FormPage {
+  width: 100%;
   font-family: 'Montserrat SemiBold', sans-serif;
 
   &_title {
-    @include Flex(center);
+    @include FlexColumn(center);
+    gap: spacing(2);
   }
 }

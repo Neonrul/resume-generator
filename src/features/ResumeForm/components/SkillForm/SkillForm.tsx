@@ -4,7 +4,6 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import Input from '../../../../components/Input/Input.tsx';
 import { SkillVariantArray } from './SkillVariantArray.tsx';
 import Button from '../../../../components/Button/Button.tsx';
-import { Accordion } from '../../../../components/Accordion/Accordion.tsx';
 import RangeInput from '../../../../components/Input/RangeInput.tsx';
 
 export const SkillForm: FC = () => {
@@ -20,7 +19,7 @@ export const SkillForm: FC = () => {
   const skillsArray = useWatch({ control, name: 'skills' });
 
   return (
-    <Accordion title="Skills">
+    <>
       {skillsField.fields.map((field, skillIndex) => {
         const isSkillHaveVariant = skillsArray[skillIndex]?.details[0].variant !== undefined;
         return (
@@ -39,6 +38,6 @@ export const SkillForm: FC = () => {
         );
       })}
       <Button onClick={() => skillsField.append({ name: '', details: [{ level: '50%' }] })}>Add new skill</Button>
-    </Accordion>
+    </>
   );
 };

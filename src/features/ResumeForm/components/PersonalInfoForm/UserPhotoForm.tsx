@@ -37,7 +37,7 @@ export const UserPhotoForm: FC<IUserPhotoForm> = ({ photo, handleCropComplete, i
         />
       )}
       <FileInput
-        fileLabel="Your Photo"
+        label="Your Photo"
         description="Photo must be 416x300"
         accept="image/*"
         isFileSelected={!!photo}

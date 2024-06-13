@@ -22,7 +22,6 @@
 .userProfile_container {
   @include FlexColumn;
   gap: spacing(2.5);
-  width: 60vw;
 }
 
 .flexContainer {

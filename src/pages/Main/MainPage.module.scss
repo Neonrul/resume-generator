@@ -17,26 +17,4 @@
     @include FlexColumn;
     gap: spacing(1);
   }
-
-  &_stepsSection {
-    @include Flex(null, space-around);
-
-    &_description {
-      @include FlexColumn(flex-end);
-      gap: spacing(4);
-      margin-top: spacing(3);
-    }
-
-    & .text {
-      @include Flex(center);
-    }
-    .icon {
-      width: 30px;
-      height: 30px;
-
-      &.right {
-        transform: rotate(180deg);
-      }
-    }
-  }
 }

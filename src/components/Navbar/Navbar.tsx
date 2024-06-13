@@ -1,15 +1,19 @@
 import { FC } from 'react';
 import styles from './Navbar.module.scss';
-import { TPages } from '../../types/TPages.ts';
+import { TFormPages, TPages } from '../../types/TPages.ts';
 import Button from '../Button/Button.tsx';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useMatch, useNavigate } from 'react-router-dom';
+import { FormStepProgress } from '../../features/FormStepProgress/FormStepProgress.tsx';
+import { initialFormSteps } from '../../constants/formConstants.ts';
 
 export const Navbar: FC = () => {
   const location = useLocation();
   const state = location?.state ? (location.state as { isPreview?: boolean }) : {};
-  const isMainPage = (location.pathname as TPages) === TPages.MAIN;
-  const isFormPage = (location.pathname as TPages) === TPages.FORM;
-  const isPreviewPage = (location.pathname as TPages) === TPages.PREVIEW;
+  const match = useMatch('/:mainRoute/:formRoute');
+  const isMainPage = (match?.params?.mainRoute as TPages) === TPages.MAIN;
+  const isFormPage = (match?.params?.mainRoute as TPages) === TPages.FORM;
+  const isPreviewPage = (match?.params?.mainRoute as TPages) === TPages.PREVIEW;
+  const isNewFormPage = (match?.params?.formRoute as TFormPages) === TFormPages.NEW;
   const navigate = useNavigate();
 
   return (
@@ -18,7 +22,11 @@ export const Navbar: FC = () => {
         {!isMainPage && <Button onClick={() => navigate(TPages.MAIN)}>Back to Main</Button>}
       </section>
 
-      <p className={styles.Navbar_text}>Resume Generator</p>
+      {isFormPage && !isNewFormPage ? (
+        <FormStepProgress steps={initialFormSteps} currentStep={3} />
+      ) : (
+        <p className={styles.Navbar_text}>Resume Generator</p>
+      )}
 
       <section className={styles.Navbar_rightSection}>
         {isFormPage && <Button onClick={() => navigate(TPages.PREVIEW)}>Go to Preview</Button>}

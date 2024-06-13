@@ -1,4 +1,4 @@
-import { FC, HTMLProps, useRef } from 'react';
+import { cloneElement, FC, HTMLProps, ReactElement, useRef } from 'react';
 import Button from '../Button/Button.tsx';
 import { IFormAttributes, IFormData } from '../../types/formTypes.ts';
 import { UseFormRegister } from 'react-hook-form';
@@ -9,32 +9,38 @@ import cn from 'classnames';
 
 interface IFileInputProps extends HTMLProps<HTMLInputElement>, IFormAttributes {
   registerProps?: ReturnType<UseFormRegister<IFormData>>;
-  handleFileUpload?: (file?: File) => void;
+  onUpload?: (file?: File) => void;
   isFileSelected?: boolean;
-  fileLabel: string;
+  label?: string;
+  buttonComponent?: ReactElement;
 }
 
 const FileInput: FC<IFileInputProps> = ({
   registerProps,
-  fileLabel,
+  label,
   isFileSelected,
-  handleFileUpload,
+  onUpload,
+  buttonComponent,
   ...overProps
 }) => {
   const hiddenFileInput = useRef<HTMLInputElement | null>(null);
   const triggerFileInputClick = () => hiddenFileInput.current?.click();
   return (
     <>
-      <Button onClick={triggerFileInputClick}>
-        <section className={styles.inputControl_file}>
-          <p id="file-input-label">{fileLabel}</p>
-          {hiddenFileInput.current?.files?.[0]?.name || isFileSelected ? (
-            <img src={filePresent} alt="file successfully uploaded" />
-          ) : (
-            <img src={uploadFile} alt="file is unavailable" />
-          )}
-        </section>
-      </Button>
+      {buttonComponent ? (
+        cloneElement(buttonComponent, { onClick: triggerFileInputClick })
+      ) : (
+        <Button onClick={triggerFileInputClick}>
+          <section className={styles.inputControl_file}>
+            <p id="file-input-label">{label}</p>
+            {hiddenFileInput.current?.files?.[0]?.name || isFileSelected ? (
+              <img src={filePresent} alt="file successfully uploaded" />
+            ) : (
+              <img src={uploadFile} alt="file is unavailable" />
+            )}
+          </section>
+        </Button>
+      )}
       <input
         type="file"
         aria-labelledby="file-input-label"
@@ -49,7 +55,7 @@ const FileInput: FC<IFileInputProps> = ({
         }}
         onChange={async event => {
           const fileUploaded = event.target.files?.[0];
-          handleFileUpload?.(fileUploaded);
+          onUpload?.(fileUploaded);
           await registerProps?.onChange?.(event);
         }}
       />

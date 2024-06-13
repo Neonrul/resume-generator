@@ -1,12 +1,10 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TPages } from '../../types/TPages.ts';
-import { GraphicButton } from '../../components/MainPageButton/GraphicButton.tsx';
+import { TFormPages, TPages } from '../../types/TPages.ts';
 import styles from './MainPage.module.scss';
 import formPreview from '../../assets/images/formPreview.png';
 import resumePreview from '../../assets/images/resumePreview.png';
-import arrowIcon from '../../assets/icons/arrow.svg';
-import cn from 'classnames';
+import ChoiceSection from '../../components/ChoiceSection/ChoiceSection.tsx';
 
 export const MainPage: FC = () => {
   const navigate = useNavigate();
@@ -16,26 +14,22 @@ export const MainPage: FC = () => {
         <h2>Welcome to Resume Generator</h2>
         <p>Your tool for tool for quick and easy CV creation!</p>
       </section>
-
-      <section className={styles.mainPage_stepsSection}>
-        <GraphicButton
-          onClick={() => navigate(TPages.PREVIEW, { state: { isPreview: true } })}
-          label="See preview"
-          angle="left"
-          image={resumePreview}
-        />
-        <div className={styles.mainPage_stepsSection_description}>
-          <div className={styles.text}>
-            <img className={styles.icon} src={arrowIcon} alt="left arrow icon" />
-            Review how CV will look like before you start creating yours
-          </div>
-          <div className={styles.text}>
-            Create a new resume or update an existing one
-            <img className={cn(styles.icon, styles.right)} src={arrowIcon} alt="left arrow icon" />
-          </div>
-        </div>
-        <GraphicButton onClick={() => navigate(TPages.FORM)} label="Go to form" angle="right" image={formPreview} />
-      </section>
+      <ChoiceSection
+        firstChoice={{
+          type: 'GraphicButton',
+          onClick: () => navigate(TPages.PREVIEW, { state: { isPreview: true } }),
+          label: 'See preview',
+          image: resumePreview,
+          descriptions: 'Review how CV will look like before you start creating yours',
+        }}
+        secondChoice={{
+          type: 'GraphicButton',
+          onClick: () => navigate(`${TPages.FORM}/${TFormPages.NEW}`),
+          label: 'Go to form',
+          image: formPreview,
+          descriptions: 'Create a new resume or update an existing one',
+        }}
+      />
       <section className={styles.mainPage_textSection}>
         <h3>About the App:</h3>
         <p>

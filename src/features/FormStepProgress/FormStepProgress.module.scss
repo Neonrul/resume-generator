@@ -1,0 +1,43 @@
+@import 'styles/_helpers';
+@import 'styles/_colors';
+
+.FormProgress {
+  @include Flex(center);
+
+  &_step {
+    @include Flex(center);
+  }
+
+  &_circle {
+    @include Flex(center, center);
+    width: 35px;
+    height: 35px;
+    position: relative;
+    border-radius: 50%;
+    border: 5px solid $grey;
+    background-color: transparent;
+
+    &.current::before {
+      content: '';
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background-color: $greyDark;
+    }
+
+    &.complete {
+      border-color: $grey5;
+      background-color: $grey5;
+    }
+  }
+
+  &_line {
+    width: 70px;
+    height: 5px;
+    background-color: $grey;
+
+    &.complete {
+      background-color: $grey5;
+    }
+  }
+}

@@ -6,6 +6,7 @@ import { initialFormData } from '../constants/formConstants.ts';
 import { resumePreviewData } from '../constants/resumePreviewData.tsx';
 import { convertToImageString } from '../utils/convertToImageString.ts';
 import { AppActionTypes, appReducer } from './AppReducer.ts';
+import { formStepsInitialState, formStepsReducer } from '../reducers/formStepsReducer/formStepsReducer.ts';
 
 const normalizeFormData: (data: IFormData) => Promise<TResumeData> = async data => {
   const { interests, experience, education, contacts, photoLink, dayOfBirth, city, languages, ...rest } = data;
@@ -51,6 +52,8 @@ export const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
     resumeData: resumePreviewData,
   });
 
+  const [{ steps }, formStepsDispatch] = useReducer(formStepsReducer, formStepsInitialState);
+
   const submitResume = useCallback(
     async (formData: IFormData) => {
       const resumeData = await normalizeFormData(formData);
@@ -69,10 +72,13 @@ export const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const appContext = useMemo<IAppContext>(
     () => ({
       ...state,
+      formSteps: steps,
+      completeStep: id => formStepsDispatch({ type: 'COMPLETE_STEP', id }),
+      restartStep: id => formStepsDispatch({ type: 'RESTART_STEP', id }),
       submitResume,
       loadSavedFormData,
     }),
-    [submitResume, state, loadSavedFormData]
+    [steps, formStepsDispatch, submitResume, state, loadSavedFormData]
   );
   return <AppContext.Provider value={appContext}>{children}</AppContext.Provider>;
 };

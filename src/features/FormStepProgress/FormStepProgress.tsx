@@ -1,11 +1,15 @@
 import { FC } from 'react';
 import styles from './FormStepProgress.module.scss';
 import cn from 'classnames';
-import { IFormStepsState } from '../../reducers/formStepsReducer/formStepsReducer.ts';
+import { IFormStep } from '../../types/formTypes.ts';
+import { TFormPages } from '../../types/TPages.ts';
 
-type TFormStepProgressProps = IFormStepsState;
+interface IFormStepProgressProps {
+  steps: IFormStep[];
+  currentStep?: TFormPages;
+}
 
-export const FormStepProgress: FC<TFormStepProgressProps> = ({ steps, currentStep }) => {
+export const FormStepProgress: FC<IFormStepProgressProps> = ({ steps, currentStep }) => {
   return (
     <div className={styles.FormProgress}>
       {steps.map(step => (
@@ -13,7 +17,7 @@ export const FormStepProgress: FC<TFormStepProgressProps> = ({ steps, currentSte
           <div
             className={cn(
               styles.FormProgress_circle,
-              step.number === currentStep && styles.current,
+              step.id === currentStep && styles.current,
               step.complete && styles.complete
             )}
           ></div>

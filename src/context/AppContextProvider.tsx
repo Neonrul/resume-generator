@@ -5,8 +5,14 @@ import { IFormData } from '../types/formTypes.ts';
 import { initialFormData } from '../constants/formConstants.ts';
 import { resumePreviewData } from '../constants/resumePreviewData.tsx';
 import { convertToImageString } from '../utils/convertToImageString.ts';
-import { AppActionTypes, appReducer } from './AppReducer.ts';
-import { formStepsInitialState, formStepsReducer } from '../reducers/formStepsReducer/formStepsReducer.ts';
+import { AppAction, AppActionTypes, appReducer, IAppState } from './AppReducer.ts';
+import {
+  FormStepsAction,
+  formStepsInitialState,
+  formStepsReducer,
+  IFormStepsState,
+} from '../reducers/formStepsReducer/formStepsReducer.ts';
+import { combineReducers } from '../store/combineReducers.ts';
 
 const normalizeFormData: (data: IFormData) => Promise<TResumeData> = async data => {
   const { interests, experience, education, contacts, photoLink, dayOfBirth, city, languages, ...rest } = data;
@@ -45,14 +51,36 @@ const normalizeFormData: (data: IFormData) => Promise<TResumeData> = async data 
     ),
   };
 };
+interface AppState {
+  formSteps: IFormStepsState;
+  app: IAppState;
+}
+
+type AppActions = {
+  formSteps: FormStepsAction;
+  app: AppAction;
+};
+
+type ActionsMap<A> = {
+  [K in keyof A]: A[K] extends Record<keyof A[K], (...arg: any[]) => infer R> ? R : any;
+}[keyof A];
 
 export const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [state, dispatch] = useReducer(appReducer, {
-    formData: initialFormData,
-    resumeData: resumePreviewData,
-  });
-
-  const [{ steps }, formStepsDispatch] = useReducer(formStepsReducer, formStepsInitialState);
+  // const [state, dispatch] = useReducer(appReducer, {
+  //   formData: initialFormData,
+  //   resumeData: resumePreviewData,
+  // });
+  const initialState = {
+    app: {
+      formData: initialFormData,
+      resumeData: resumePreviewData,
+    },
+    formSteps: formStepsInitialState,
+  };
+  const [state, dispatch] = combineReducers<AppState, ActionsMap<AppActions>>({
+    formSteps: formStepsReducer,
+    app: appReducer,
+  })(initialState);
 
   const submitResume = useCallback(
     async (formData: IFormData) => {
@@ -71,14 +99,14 @@ export const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const appContext = useMemo<IAppContext>(
     () => ({
-      ...state,
-      formSteps: steps,
-      completeStep: id => formStepsDispatch({ type: 'COMPLETE_STEP', id }),
-      restartStep: id => formStepsDispatch({ type: 'RESTART_STEP', id }),
+      ...state.app,
+      formSteps: state.formSteps.steps,
+      completeStep: id => dispatch({ type: 'COMPLETE_STEP', id }),
+      restartStep: id => dispatch({ type: 'RESTART_STEP', id }),
       submitResume,
       loadSavedFormData,
     }),
-    [steps, formStepsDispatch, submitResume, state, loadSavedFormData]
+    [dispatch, submitResume, state, loadSavedFormData]
   );
   return <AppContext.Provider value={appContext}>{children}</AppContext.Provider>;
 };

@@ -10,23 +10,26 @@ import cn from 'classnames';
 import { TFormPages, TPages } from '../../types/TPages.ts';
 
 export const ResumeForm: FC = () => {
-  const { submitResume } = useAppContext();
+  const { submitResume, formSteps, completeStep, restartStep } = useAppContext();
   const { handleSubmit } = useFormContext<IFormData>();
   const navigate = useNavigate();
-  const match = useMatch('/form/:route');
-
-  const formRoutes = Object.values(TFormPages);
-  const currentIndex = formRoutes.indexOf(match?.params?.route as TFormPages);
+  const match = useMatch('/form/:formRoute');
+  const formRoute = match?.params?.formRoute as TFormPages;
+  const currentStep = formSteps.find(step => step.id === formRoute);
 
   const goToNextForm = () => {
-    if (currentIndex < formRoutes.length - 1) {
-      navigate(`/${TPages.FORM}/${formRoutes[currentIndex + 1]}`);
+    if (currentStep) completeStep(currentStep.id);
+    const nextStep = formSteps.find(step => step.number === Number(currentStep?.number) + 1);
+    if (nextStep) {
+      navigate(`/${TPages.FORM}/${nextStep.id}`);
     }
   };
 
   const goToPreviousForm = () => {
-    if (currentIndex > 0) {
-      navigate(`/${TPages.FORM}/${formRoutes[currentIndex - 1]}`);
+    if (currentStep) restartStep(currentStep.id);
+    const prevStep = formSteps.find(step => step.number === Number(currentStep?.number) - 1);
+    if (prevStep) {
+      navigate(`/${TPages.FORM}/${prevStep.id}`);
     }
   };
 

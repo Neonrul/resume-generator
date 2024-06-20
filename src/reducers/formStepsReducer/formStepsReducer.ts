@@ -1,18 +1,19 @@
 import { TFormPages } from '../../types/TPages.ts';
 import { IFormStep } from '../../types/formTypes.ts';
 import { initialFormSteps } from '../../constants/formConstants.ts';
+import { Reducer } from 'react';
 
 export interface IFormStepsState {
   steps: IFormStep[];
 }
 
-type FormStepsAction = { type: 'COMPLETE_STEP'; id: TFormPages } | { type: 'RESTART_STEP'; id: TFormPages };
+export type FormStepsAction = { type: 'COMPLETE_STEP'; id: TFormPages } | { type: 'RESTART_STEP'; id: TFormPages };
 
 export const formStepsInitialState: IFormStepsState = {
   steps: initialFormSteps,
 };
 
-export const formStepsReducer = (state: IFormStepsState, action: FormStepsAction): IFormStepsState => {
+export const formStepsReducer: Reducer<IFormStepsState, FormStepsAction> = (state, action) => {
   switch (action.type) {
     case 'COMPLETE_STEP': {
       const updatedSteps = state.steps.map(step => (step.id === action.id ? { ...step, complete: true } : step));
